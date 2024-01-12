@@ -1,23 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useIsLoggedIn from "../../hooks/useIsLoggedIn";
+import LoadingCircular from "../../components/loader";
+import MyTextField from "../../components/textField";
+
 
 const AuthPages = () => {
-  const [loading, setLoading] = React.useState(false);
+  const [uid] = useIsLoggedIn("/protected");
+  const [isLoading,setLoading] = useState(true)
+
+  const [loadingButton, setLoadingButton] = React.useState(false);
+
 
   const navigate = useNavigate();
-
+  // Listen for the UID Changes
   useEffect(() => {
-    const isLoggedIn = async () => {
-      const res = await fetch("/protected", {
-        credentials: "include",
-      });
-      if (!res.ok) {
-        navigate("/");
+    if ((uid !== undefined)) {
+      // UID would never undefined after fetching from useIsLogged In
+      // After done fetching setLoading to false
+        setLoading(false)
       }
-    };
-    isLoggedIn();
-  }, []);
+  
+    }, [uid]);
+    
+    // Listen for the isLoading changes
+    // After loading is done, which is fetching is also done
+    useEffect(()=>{
+      // check whether uid has property of uid itself 
+      // Key 'uid' indicates user is authorized
+      if ((!isLoading) && (uid.hasOwnProperty("uid")) ) {
+        navigate("/dashboard")
+      }
+    },[isLoading])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +66,12 @@ const AuthPages = () => {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <>
+      {
+        isLoading ? (
+          <LoadingCircular></LoadingCircular>
+        ) :
+    (<main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="auth-wrapper w-2/5 h-[30rem] bg-white rounded-xl shadow shadow-black/30 backdrop-blur flex flex-col items-center gap-y-5">
         <div className="brand pt-12 pb-3">
           <h3 className="text-lg font-semibold text-center">SIGT</h3>
@@ -60,41 +80,31 @@ const AuthPages = () => {
 
         <div className="form-wrapper w-4/5">
           <form
-            className="flex flex-col items-center gap-y-2"
+            className="flex flex-col items-center justify-center gap-y-2"
             onSubmit={handleSubmit}
-          >
-            <label htmlFor="uname">Username</label>
-            <input
-              type="text"
-              name="uname"
-              id="uname"
-              className="border border-sky-500 rounded w-4/5 mb-3"
-              required
-            />
+          > 
+          {/* <MyTextField name="namaBarang" title="Nama Barang" /> */}
+          <MyTextField name="uname" title="Username"/>
 
-            <label htmlFor="passwd">Password</label>
-            <input
-              type="password"
-              name="passwd"
-              id="passwd"
-              className="border border-sky-500 rounded w-4/5 mb-3"
-              required
-            />
+          <MyTextField name="passwd" title="Password" type="password"/>
+
 
             <input
               type="submit"
-              value={loading ? "Loading..." : "Masuk"}
+              value={loadingButton ? "Loading..." : "Masuk"}
               className={`px-8 py-2 rounded ${
-                loading
+                loadingButton
                   ? "bg-zinc-200"
                   : "bg-sky-500 text-zinc-50  transition-all duration-150 hover:border hover:border-sky-500 hover:bg-transparent hover:text-sky-500 cursor-pointer"
               } `}
-              disabled={loading}
+              disabled={loadingButton}
             />
           </form>
         </div>
       </div>
-    </main>
+    </main>)
+      }
+    </>
   );
 };
 

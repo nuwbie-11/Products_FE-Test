@@ -23,7 +23,7 @@ function AddProducts() {
   const [brandController, setBrandController] = useState();
 
 useEffect(() => {
-    if (uid !== undefined) {
+  if ((uid !== undefined)  && (brandsOption !== undefined) ) {
       setLoading(false)
     }
 
