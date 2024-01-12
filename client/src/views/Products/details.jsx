@@ -11,15 +11,15 @@ import useIsLoggedIn from "../../hooks/useIsLoggedIn";
 function ProductDetails() {
   const params = useParams();
   const navigate = useNavigate();
-  const [detail] = useFetch(`/products/${params.id}`);
+  const [detail] = useFetch(`http://127.0.0.1:5000/products/${params.id}`);
   
   const [editorState, setEditorState] = useState();
   
-  const [brandsOption, setBrandsOption] = useFetch("/getDistinctBrand");
+  const [brandsOption, setBrandsOption] = useFetch("http://127.0.0.1:5000/getDistinctBrand");
   const [newBrandOption, setNewBrandOption] = useState("");
   const [brandController, setBrandController] = useState();
   
-  const [uid] = useIsLoggedIn("/protected");
+  const [uid] = useIsLoggedIn("http://127.0.0.1:5000/protected");
   const [isLoading,setLoading] = useState(true)
  
   useEffect(() => {

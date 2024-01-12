@@ -11,8 +11,8 @@ import useIsLoggedIn from "../../hooks/useIsLoggedIn";
 function Dashboard() {
   const navigate = useNavigate();
   const { activeUserId, setActiveUserId } = useActiveUserContext();
-  const [products] = useFetch("/getProducts");
-  const [uid] = useIsLoggedIn("/protected");
+  const [products] = useFetch("http://127.0.0.1:5000/getProducts");
+  const [uid] = useIsLoggedIn("http://127.0.0.1:5000/protected");
   const [isLoading,setLoading] = useState(true)
 
   useEffect(() => {

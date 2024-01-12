@@ -15,8 +15,8 @@ function AddProducts() {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [brandsOption, setBrandsOption] = useFetch("/getDistinctBrand");
-  const [uid] = useIsLoggedIn("/protected");
+  const [brandsOption, setBrandsOption] = useFetch("http://127.0.0.1:5000/getDistinctBrand");
+  const [uid] = useIsLoggedIn("http://127.0.0.1:5000/protected");
   const [isLoading,setLoading] = useState(true)
 
   const [newBrandOption, setNewBrandOption] = useState("");
