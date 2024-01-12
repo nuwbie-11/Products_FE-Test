@@ -7,7 +7,7 @@ import MyTextField from "../../components/textField";
 
 
 const AuthPages = () => {
-  const [uid] = useIsLoggedIn("http://127.0.0.1:5000/protected");
+  const [uid] = useIsLoggedIn("/protected");
   const [isLoading,setLoading] = useState(true)
 
   const [loadingButton, setLoadingButton] = React.useState(false);
