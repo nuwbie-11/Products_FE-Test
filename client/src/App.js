@@ -8,6 +8,7 @@ import NavigationBar from "./components/navbar";
 import ActiveUserContextProvider from "./context/userContext";
 import AddProducts from "./views/Products/addProduct";
 import SideBar from "./components/sidebar";
+import ProductDetails from "./views/Products/details";
 
 
 const routes = [
@@ -26,6 +27,11 @@ const routes = [
     pages:<AddProducts/>,
     isAuth:false,
   },
+  {
+    path:"/details/:id",
+    pages:<ProductDetails/>,
+    isAuth:false,
+  },
 ]
 
 function App() {
@@ -40,7 +46,9 @@ function App() {
               : <Route key={index} path={route.path} element={
                 <ActiveUserContextProvider>
                   <SideBar/>
-                {route.pages}
+                  <div className="pl-[12rem] pr-5 pb-8 md:pl-[16rem] pt-12 min-h-screen flex flex-col gap-y-5">
+                    {route.pages}
+                  </div>
               </ActiveUserContextProvider>
               }></Route>
              )

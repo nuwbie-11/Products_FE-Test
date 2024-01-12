@@ -30,7 +30,7 @@ const SideBar = () => {
       ];
   return (
     <header className="z-[999] relative">
-        <div className="h-screen fixed bg-white w-[14.5rem] shadow-lg shadow-black/40 top-0 sidebar-container">
+        <div className="h-screen fixed bg-white md:w-[14.5rem] shadow-lg shadow-black/40 top-0 sidebar-container">
           <nav className="flex flex-col w-full py-12">
             <ul className="navItems flex flex-col pt-12 gap-y-3 px-3 font-semibold">
               {userMenus.map((items, key) => (

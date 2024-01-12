@@ -49,6 +49,7 @@ class Product(db.Model):
             'id' : this.id,
             'namaBarang' : this.namaBarang,
             'sku' : this.sku,
+            'deskripsi':this.deskripsi,
             'brand':this.brand,
             'namaVariasi':this.namaVariasi,
             'skuVariasi':this.skuVariasi,
