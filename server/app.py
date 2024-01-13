@@ -1,17 +1,27 @@
 from flask import Flask, request, jsonify,session,make_response
-from flask_restful import Api, Resource, reqparse
-from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api   
+from flask_cors import CORS
 from src.model import db, User,Profile,Product
 import jwt
 from datetime import datetime, timedelta
+from flask_session import Session
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://kire:apples@localhost/staffku'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "my_secretKey"
+# app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_COOKIE_SAMESITE"] = "None"
+app.config["SESSION_COOKIE_SECURE"] = True
+# Session(app)
 
+CORS(app,supports_credentials=True)
 api = Api(app)
 db.init_app(app)
+
+
 
 # Profile Routes ENDPOINT
 @app.route('/getProfile/<profileId>',methods=['GET'])
@@ -150,8 +160,9 @@ def login():
             'activeUserId':user["id"],
             'exp':datetime.utcnow() + timedelta(days = 1)
         },app.config["SECRET_KEY"])
-        response = make_response(jsonify(message='Login successful'))
-        response.set_cookie('token',token,httponly=True)
+        response = make_response(jsonify(message='Login successful',token=token))
+        response.set_cookie('activeUser',token,httponly=True)
+        response.headers['Access-Control-Allow-Origin'] = '*'
         return response
     elif user is None:
         return jsonify(message='User Not Found'), 400
@@ -165,13 +176,20 @@ def logout():
 
 @app.route('/protected', methods=['GET'])
 def protected():
-    token = request.cookies.get('token')
-    # print(token)
-    if 'uname' in session and token:
+    token = request.cookies.get('activeUser')
+    print(token)
+    print(session)
+    if 'uname' in session:
         return jsonify(message='Protected data',uid = jwt.decode(token,app.config["SECRET_KEY"],algorithms=['HS256'])["activeUserId"]), 200
     else:
         return jsonify(message='Unauthorized access'), 401
 
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
 
 

@@ -6,7 +6,7 @@ const navIcons = [<BsHouse />,<BsPlusCircle /> ,<BsArrowRight />];
 const SideBar = () => {
     const navigate = useNavigate();
     const logOut = async () => {
-        const res = await fetch("/logout", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/logout`, {
           method: "POST",
         });
         if (res.status === 200) {

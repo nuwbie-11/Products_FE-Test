@@ -69,7 +69,7 @@ function ProductDetails() {
       hargaVariasi: formData.get("hargaVariasi"),
     };
 
-    const res = await fetch(`/updateProduct/${detail["id"]}`, {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/updateProduct/${detail["id"]}`, {
       method: "POST",
       body: JSON.stringify(dataStream),
       headers: {
@@ -85,7 +85,7 @@ function ProductDetails() {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-    const res = await fetch(`/deleteProduct/${detail["id"]}`, {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/deleteProduct/${detail["id"]}`, {
       credentials: "include",
     });
 

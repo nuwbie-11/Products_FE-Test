@@ -7,7 +7,7 @@ import MyTextField from "../../components/textField";
 
 
 const AuthPages = () => {
-  const [uid] = useIsLoggedIn("https://aimasterykm105.pythonanywhere.com/protected");
+  const [uid] = useIsLoggedIn(`/protected`);
   const [isLoading,setLoading] = useState(true)
 
   const [loadingButton, setLoadingButton] = React.useState(false);
@@ -45,7 +45,7 @@ const AuthPages = () => {
       passwd: formData.get("passwd"),
     };
     try {
-      const response = await fetch("/login", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         body: JSON.stringify(dataStream),
         headers: {

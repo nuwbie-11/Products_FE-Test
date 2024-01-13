@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
 const useIsLoggedIn = (url) => {
-  const [activeUser,setActiveUser] = useState()
+  const [activeUser, setActiveUser] = useState();
 
-  useEffect(()=>{
-    fetch(url,{
-        credentials:"include"
-    }).then((res)=>res.json()).then((data)=>setActiveUser(data))
-  },[url])
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL + url}`,{
+      credentials:'include'
+    })
+      .then((res) => res.json())
+      .then((data) => setActiveUser(data));
+  }, [url]);
 
   function handleChanges(newState) {
-    setActiveUser(newState)
+    setActiveUser(newState);
   }
-  return [activeUser,handleChanges]
-}
+  return [activeUser, handleChanges];
+};
 
-export default useIsLoggedIn
+export default useIsLoggedIn;

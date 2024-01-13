@@ -12,7 +12,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const { activeUserId, setActiveUserId } = useActiveUserContext();
   const [products] = useFetch("/getProducts");
-  const [uid] = useIsLoggedIn("/protected");
+  const [uid] = useIsLoggedIn(`/protected`);
   const [isLoading,setLoading] = useState(true)
 
   useEffect(() => {

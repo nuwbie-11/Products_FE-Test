@@ -58,7 +58,7 @@ useEffect(() => {
       hargaVariasi: formData.get("hargaVariasi"),
     };
 
-    const res = await fetch("/createProductRecord", {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/createProductRecord`, {
       method: "POST",
       body: JSON.stringify(dataStream),
       headers: {
