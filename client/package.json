@@ -2,7 +2,11 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+<<<<<<< HEAD
   "proxy": "https://aimasterykm105.pythonanywhere.com",
+=======
+  "proxy": "http://localhost:5000",
+>>>>>>> parent of 2d0b49f (Update Route)
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
