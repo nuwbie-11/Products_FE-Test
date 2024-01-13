@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = "my_secretKey"
 # app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
-app.config["SESSION_COOKIE_SECURE"] = True
+# app.config["SESSION_COOKIE_SECURE"] = True
 # Session(app)
 
 CORS(app,supports_credentials=True)
@@ -174,12 +174,12 @@ def logout():
     session.pop('uname', None)  # Clear the session variable
     return jsonify(message='Logged out'), 200
 
-@app.route('/protected', methods=['GET'])
+@app.route('/protected', methods=['POST'])
 def protected():
     token = request.cookies.get('activeUser')
     print(token)
     print(session)
-    if 'uname' in session:
+    if 'uname' in session and token:
         return jsonify(message='Protected data',uid = jwt.decode(token,app.config["SECRET_KEY"],algorithms=['HS256'])["activeUserId"]), 200
     else:
         return jsonify(message='Unauthorized access'), 401

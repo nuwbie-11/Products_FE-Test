@@ -45,7 +45,7 @@ const AuthPages = () => {
       passwd: formData.get("passwd"),
     };
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
+      const response = await fetch(`/login`, {
         method: "POST",
         body: JSON.stringify(dataStream),
         headers: {

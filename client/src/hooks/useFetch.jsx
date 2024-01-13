@@ -5,7 +5,9 @@ const useFetch = (url) => {
   const [data,setData] = useState()
 
   useEffect(()=>{
-    fetch(`${process.env.REACT_APP_API_URL+url}`)
+    fetch(url,{
+      method: 'POST',
+    })
     .then((res)=>res.json())
     .then((data)=>setData(data["response"]))
   },[url])
