@@ -173,15 +173,17 @@ def login():
 @app.route('/logout', methods=['POST'])
 def logout():
     print("Running LogOut")
+    resp = make_response(jsonify(message='Logged out'))
+    resp.set_cookie('activeUser','')
     session.pop('uname', None)  # Clear the session variable
-    return jsonify(message='Logged out'), 200
+    return resp
 
 @app.route('/protected', methods=['GET'])
 def protected():
     token = request.cookies.get('activeUser')
     print(token)
     print(session)
-    if 'uname' in session:
+    if 'uname' in session and token:
         return jsonify(message='Protected data',uid = jwt.decode(token,app.config["SECRET_KEY"],algorithms=['HS256'])["activeUserId"]), 200
     else:
         return jsonify(message='Unauthorized access'), 401
