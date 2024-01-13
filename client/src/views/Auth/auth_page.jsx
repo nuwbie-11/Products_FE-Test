@@ -7,7 +7,7 @@ import MyTextField from "../../components/textField";
 
 
 const AuthPages = () => {
-  const [uid] = useIsLoggedIn("https://aimasterykm105.pythonanywhere.com/protected");
+  const [uid] = useIsLoggedIn("/protected");
   const [isLoading,setLoading] = useState(true)
 
   const [loadingButton, setLoadingButton] = React.useState(false);
@@ -16,11 +16,11 @@ const AuthPages = () => {
   const navigate = useNavigate();
   // Listen for the UID Changes
   useEffect(() => {
-    if ((uid !== undefined)) {
-      // UID would never undefined after fetching from useIsLogged In
-      // After done fetching setLoading to false
-        setLoading(false)
-      }
+    // if ((uid !== undefined)) {
+    //   // UID would never undefined after fetching from useIsLogged In
+    //   // After done fetching setLoading to false
+    // }
+    setLoading(false)
   
     }, [uid]);
     
@@ -29,9 +29,9 @@ const AuthPages = () => {
     useEffect(()=>{
       // check whether uid has property of uid itself 
       // Key 'uid' indicates user is authorized
-      if ((!isLoading) && (uid.hasOwnProperty("uid")) ) {
-        navigate("/dashboard")
-      }
+      // if ((!isLoading) && (uid.hasOwnProperty("uid")) ) {
+      //   navigate("/dashboard")
+      // }
     },[isLoading])
 
   const handleSubmit = async (e) => {
