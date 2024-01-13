@@ -10,12 +10,12 @@ from flask_session import Session
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://kire:apples@localhost/staffku'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = "my_secretKey"
-# app.config["SESSION_TYPE"] = "filesystem"
+app.config['SECRET_KEY'] = "something_unique_and_secret"
+app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
-# Session(app)
+Session(app)
 
 CORS(app,supports_credentials=True)
 api = Api(app)
@@ -149,6 +149,7 @@ def getDistinctBrand():
 
 @app.route('/login', methods=['POST'])
 def login():
+    print("Running LogIn")
     data = request.json
     uname = data.get('uname')
     passwd = data.get('passwd')
@@ -161,8 +162,8 @@ def login():
             'exp':datetime.utcnow() + timedelta(days = 1)
         },app.config["SECRET_KEY"])
         response = make_response(jsonify(message='Login successful',token=token))
-        response.set_cookie('activeUser',token,httponly=True)
-        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.set_cookie('activeUser',token,httponly=True,secure=True,samesite="None")
+        # response.headers['Access-Control-Allow-Origin'] = '*'
         return response
     elif user is None:
         return jsonify(message='User Not Found'), 400
@@ -171,6 +172,7 @@ def login():
     
 @app.route('/logout', methods=['POST'])
 def logout():
+    print("Running LogOut")
     session.pop('uname', None)  # Clear the session variable
     return jsonify(message='Logged out'), 200
 
@@ -185,11 +187,12 @@ def protected():
         return jsonify(message='Unauthorized access'), 401
 
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+# @app.after_request
+# def after_request(response):
+#     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+#     # response.headers['Access-Control-Allow-Origin'] = '*'
+#     return response
 
 
 

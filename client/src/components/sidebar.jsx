@@ -8,6 +8,7 @@ const SideBar = () => {
     const logOut = async () => {
         const res = await fetch(`${process.env.REACT_APP_API_URL}/logout`, {
           method: "POST",
+          credentials:'include',
         });
         if (res.status === 200) {
           window.location.reload();

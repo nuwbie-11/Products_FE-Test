@@ -48,8 +48,10 @@ const AuthPages = () => {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         body: JSON.stringify(dataStream),
+        credentials:'include',
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
         },
       });
       if (!response.ok) {
