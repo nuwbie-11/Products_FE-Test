@@ -7,7 +7,7 @@ import MyTextField from "../../components/textField";
 
 
 const AuthPages = () => {
-  const [uid] = useIsLoggedIn("/protected");
+  const [uid] = useIsLoggedIn("https://aimasterykm105.pythonanywhere.com/protected");
   const [isLoading,setLoading] = useState(true)
 
   const [loadingButton, setLoadingButton] = React.useState(false);

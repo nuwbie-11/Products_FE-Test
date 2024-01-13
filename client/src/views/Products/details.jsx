@@ -11,6 +11,7 @@ import useIsLoggedIn from "../../hooks/useIsLoggedIn";
 function ProductDetails() {
   const params = useParams();
   const navigate = useNavigate();
+  const [uid] = useIsLoggedIn("/protected");
   const [detail] = useFetch(`/products/${params.id}`);
   
   const [editorState, setEditorState] = useState();
@@ -19,7 +20,6 @@ function ProductDetails() {
   const [newBrandOption, setNewBrandOption] = useState("");
   const [brandController, setBrandController] = useState();
   
-  const [uid] = useIsLoggedIn("/protected");
   const [isLoading,setLoading] = useState(true)
  
   useEffect(() => {
@@ -30,7 +30,7 @@ function ProductDetails() {
   }, [uid]);
   
   useEffect(()=>{
-    if ((!isLoading) && (!uid.hasOwnProperty("uid")) ) {
+    if ((!isLoading) && (!uid.hasOwnProperty("uid"))  && (uid !== undefined)) {
       navigate("/")
     }
   },[isLoading])
