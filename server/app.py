@@ -11,11 +11,11 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://kire:apples@localhost/staffku'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = "my_secretKey"
-# app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
-# app.config["SESSION_COOKIE_SECURE"] = True
-# Session(app)
+app.config["SESSION_COOKIE_SECURE"] = True
+Session(app)
 
 CORS(app,supports_credentials=True)
 api = Api(app)
@@ -152,29 +152,32 @@ def login():
     data = request.json
     uname = data.get('uname')
     passwd = data.get('passwd')
-    user = User.query.filter_by(username=uname).first().toJson()
-    # print(user)
-    if user["username"] == uname and user["passwd"] == passwd:
-        session['uname'] = uname  # Set a session variable
-        token = jwt.encode({
-            'activeUserId':user["id"],
-            'exp':datetime.utcnow() + timedelta(days = 1)
-        },app.config["SECRET_KEY"])
-        response = make_response(jsonify(message='Login successful',token=token))
-        response.set_cookie('activeUser',token,httponly=True)
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        return response
-    elif user is None:
-        return jsonify(message='User Not Found'), 400
-    else:
-        return jsonify(message='Login failed'), 401
+    try: 
+        user = User.query.filter_by(username=uname).first()
+        print(user)
+        if user is None:
+            return jsonify(message='User Not Found'), 400
+        elif user.username == uname and user.passwd == passwd:
+            session['uname'] = uname  # Set a session variable
+            token = jwt.encode({
+                'activeUserId':user.id,
+                'exp':datetime.utcnow() + timedelta(days = 1)
+            },app.config["SECRET_KEY"])
+            response = make_response(jsonify(message='Login successful',token=token))
+            response.set_cookie('activeUser',token,httponly=True)
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            return response
+        else:
+            return jsonify(message='Login failed'), 401
+    except Exception as e:
+            return jsonify(message=e),500
     
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('uname', None)  # Clear the session variable
     return jsonify(message='Logged out'), 200
 
-@app.route('/protected', methods=['POST'])
+@app.route('/protected', methods=['GET'])
 def protected():
     token = request.cookies.get('activeUser')
     print(token)

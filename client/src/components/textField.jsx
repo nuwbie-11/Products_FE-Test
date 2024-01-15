@@ -9,7 +9,7 @@ const MyTextField = (props) => {
         name={props.name}
         id={props.name}
         defaultValue={props.value ?? ""}
-        className="border border-sky-500 rounded w-3/5 mb-3"
+        className="border border-sky-500 rounded w-full md:w-3/5 mb-3"
         required
       />
     </>

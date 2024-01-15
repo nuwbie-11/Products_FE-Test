@@ -46,7 +46,7 @@ function App() {
               : <Route key={index} path={route.path} element={
                 <ActiveUserContextProvider>
                   <SideBar/>
-                  <div className="pl-[12rem] pr-5 pb-8 md:pl-[16rem] pt-12 min-h-screen flex flex-col gap-y-5">
+                  <div className="pl-3 pr-3 pb-24 md:pb-8 md:pl-[16rem] pt-12 min-h-screen flex flex-col gap-y-5 items-center md:items-start">
                     {route.pages}
                   </div>
               </ActiveUserContextProvider>

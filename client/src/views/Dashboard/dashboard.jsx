@@ -13,25 +13,24 @@ function Dashboard() {
   const { activeUserId, setActiveUserId } = useActiveUserContext();
   const [products] = useFetch("/getProducts");
   const [uid] = useIsLoggedIn("/protected");
-  const [isLoading,setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     if (uid !== undefined) {
-      setActiveUserId(uid)
-      setLoading(false)
+      setActiveUserId(uid);
+      setLoading(false);
     }
-
   }, [uid]);
-  
-  useEffect(()=>{
-    if ((!isLoading) && (!uid.hasOwnProperty("uid")) ) {
-      navigate("/")
+
+  useEffect(() => {
+    if (!isLoading && !uid.hasOwnProperty("uid")) {
+      navigate("/");
     }
-  },[isLoading])
+  }, [isLoading]);
 
   return (
     <>
-      {isLoading? (
+      {isLoading ? (
         <LoadingCircular></LoadingCircular>
       ) : (
         <>
@@ -40,7 +39,7 @@ function Dashboard() {
           </div>
 
           {products != null ? (
-            <div className="flex flex-wrap gap-x-8 gap-y-5">
+            <div className="flex flex-wrap justify-center items-center md:justify-start md:items-start gap-x-8 gap-y-5">
               {products.map((item, key) => (
                 <ItemCards key={key} products={item}></ItemCards>
               ))}
