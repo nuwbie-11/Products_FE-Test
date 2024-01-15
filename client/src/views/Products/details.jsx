@@ -30,9 +30,11 @@ function ProductDetails() {
   }, [uid]);
   
   useEffect(()=>{
-    if ((!isLoading) && (!uid.hasOwnProperty("uid"))  && (uid !== undefined)) {
-      navigate("/")
-    }
+    setTimeout(() => {
+      if ((!isLoading) && (!uid.hasOwnProperty("uid")) ) {
+        navigate("/")
+      }
+    }, 1000);
   },[isLoading])
 
   useEffect(() => {
@@ -101,9 +103,9 @@ function ProductDetails() {
       ) : (
         <>
           {detail != null ? (
-            <>
-              <p>{detail["sku"]}</p>
-              <div className="UpdateProductFormWrapper">
+            <div className="mb-12 md:mb-1">
+              <p className="font-bold">{detail["sku"]}</p>
+              <div className="UpdateProductFormWrapper md:w-full">
                 <form
                   className="flex flex-col items-start gap-y-2"
                   onSubmit={handleSubmit}
@@ -114,38 +116,45 @@ function ProductDetails() {
                     value={detail["namaBarang"]}
                   />
 
-                  <div className="dropdownWrapper border-b-2 border-sky-300 flex justify-between gap-x-3 pb-1 w-3/5 mb-3">
-                    <label htmlFor="brand">Brand:</label>
+                  <div className="dropdownWrapper border-b-2 w-full md:w-4/5 border-sky-300 flex lg:flex-row flex-col items-start gap-y-3 md:gap-x-3 pb-1 mb-3">
+                    <div className="options flex gap-x-3 w-full">
+                      <label htmlFor="brand">Brand:</label>
 
-                    <select
-                      name="brand"
-                      className="border-0 w-3/5"
-                      onChange={handleBrandChanges}
-                    >
-                      <option value={detail["brand"]}>{detail["brand"]}</option>
-                      {brandsOption.map((item, ix) =>
-                        item !== detail["brand"] ? (
-                          <option value={item} key={ix}>
-                            {item}
-                          </option>
-                        ) : null
-                      )}
-                    </select>
-                    <input
-                      type="text"
-                      value={newBrandOption}
-                      onChange={(e) => setNewBrandOption(e.target.value)}
-                    />
+                      <select
+                        name="brand"
+                        className="border-0 w-3/5"
+                        onChange={handleBrandChanges}
+                      >
+                        <option value={detail["brand"]}>
+                          {detail["brand"]}
+                        </option>
+                        {brandsOption.map((item, ix) =>
+                          item !== detail["brand"] ? (
+                            <option value={item} key={ix}>
+                              {item}
+                            </option>
+                          ) : null
+                        )}
+                      </select>
+                    </div>
+                    <div className="addOption flex flex-row-reverse lg:flex-row justify-end gap-x-3 w-full">
+                      <input
+                        type="text"
+                        value={newBrandOption}
+                        onChange={(e) => setNewBrandOption(e.target.value)}
+                      />
 
-                    <button
-                      className="hover:text-blue-500"
-                      onClick={() => handleNewBrandOption()}
-                    >
-                      Tambahkan Brand
-                    </button>
+                      <button
+                        className="hover:text-blue-500 flex"
+                        onClick={() => handleNewBrandOption()}
+                      >
+                        Tambahkan Brand
+                        <span className="lg:hidden block">:</span>
+                      </button>
+                    </div>
                   </div>
 
-                  <div className="bg-white h-[8rem] w-3/5 mb-3">
+                  <div className="bg-white h-[25rem] md:h-[15rem] mb-3">
                     <Editor
                       defaultContentState={editorState}
                       onContentStateChange={setEditorState}
@@ -180,7 +189,7 @@ function ProductDetails() {
                   Delete
                 </button>
               </div>
-            </>
+            </div>
           ) : null}
         </>
       )}

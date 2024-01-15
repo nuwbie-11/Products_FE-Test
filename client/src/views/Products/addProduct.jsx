@@ -9,7 +9,6 @@ import MyTextField from "../../components/textField";
 import useFetch from "../../hooks/useFetch";
 import useIsLoggedIn from "../../hooks/useIsLoggedIn";
 
-
 function AddProducts() {
   const navigate = useNavigate();
   const [editorState, setEditorState] = useState(() =>
@@ -17,23 +16,22 @@ function AddProducts() {
   );
   const [brandsOption, setBrandsOption] = useFetch("/getDistinctBrand");
   const [uid] = useIsLoggedIn("/protected");
-  const [isLoading,setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(true);
 
   const [newBrandOption, setNewBrandOption] = useState("");
   const [brandController, setBrandController] = useState();
 
-useEffect(() => {
-  if ((uid !== undefined)  && (brandsOption !== undefined) ) {
-      setLoading(false)
+  useEffect(() => {
+    if (uid !== undefined && brandsOption !== undefined) {
+      setLoading(false);
     }
-
   }, [uid]);
-  
-  useEffect(()=>{
-    if ((!isLoading) && (!uid.hasOwnProperty("uid")) ) {
-      navigate("/")
+
+  useEffect(() => {
+    if (!isLoading && !uid.hasOwnProperty("uid")) {
+      navigate("/");
     }
-  },[isLoading])
+  }, [isLoading]);
 
   const handleBrandChanges = (event) => {
     setBrandController(event.target.value);
@@ -58,14 +56,17 @@ useEffect(() => {
       hargaVariasi: formData.get("hargaVariasi"),
     };
 
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/createProductRecord`, {
-      method: "POST",
-      body: JSON.stringify(dataStream),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/createProductRecord`,
+      {
+        method: "POST",
+        body: JSON.stringify(dataStream),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
     if (res.ok) {
       navigate("/dashboard");
@@ -79,42 +80,44 @@ useEffect(() => {
       ) : (
         <>
           <h3 className="font-bold text-[2rem]">Tambah Barang</h3>
-          <div className="addProductFormWrapper">
+          <div className="addProductFormWrapper md:w-full">
             <form
               className="flex flex-col items-start gap-y-2"
               onSubmit={handleSubmit}
             >
               <MyTextField name="namaBarang" title="Nama Barang" />
 
-              <div className="dropdownWrapper border-b-2 border-sky-300 flex justify-between gap-x-3 pb-1 w-3/5 mb-3">
-                <label htmlFor="brand">Brand:</label>
-
-                <select
-                  name="brand"
-                  className="border-0 w-3/5"
-                  onChange={handleBrandChanges}
-                >
-                  {brandsOption.map((item, ix) => (
-                    <option value={item} key={ix}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  value={newBrandOption}
-                  onChange={(e) => setNewBrandOption(e.target.value)}
-                />
-
-                <button
-                  className="hover:text-blue-500"
-                  onClick={() => handleNewBrandOption()}
-                >
-                  Tambahkan Brand
-                </button>
+              <div className="dropdownWrapper border-b-2 w-full md:w-4/5 border-sky-300 flex lg:flex-row flex-col items-start gap-y-3 md:gap-x-3 pb-1 mb-3">
+                <div className="options flex gap-x-3 w-full">
+                  <label htmlFor="brand">Brand:</label>
+                  <select
+                    name="brand"
+                    className="border-0 md:w-4/5 w-full"
+                    onChange={handleBrandChanges}
+                  >
+                    {brandsOption.map((item, ix) => (
+                      <option value={item} key={ix}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="addOption flex flex-row-reverse lg:flex-row justify-end gap-x-3 w-full">
+                  <input
+                    type="text"
+                    value={newBrandOption}
+                    onChange={(e) => setNewBrandOption(e.target.value)}
+                  />
+                  <button
+                    className="hover:text-blue-500 flex"
+                    onClick={() => handleNewBrandOption()}
+                  >
+                    Tambahkan Brand<span className="lg:hidden block">:</span>
+                  </button>
+                </div>
               </div>
 
-              <div className="bg-white h-[8rem] w-3/5 mb-3">
+              <div className="bg-white h-[25rem] md:h-[15rem] mb-3">
                 <Editor
                   editorState={editorState}
                   onEditorStateChange={setEditorState}

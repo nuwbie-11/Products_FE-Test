@@ -40,7 +40,7 @@ function Dashboard() {
           </div>
 
           {products != null ? (
-            <div className="flex flex-wrap gap-x-8 gap-y-5">
+            <div className="flex flex-wrap justify-center items-center md:justify-start md:items-start gap-x-8 gap-y-5">
               {products.map((item, key) => (
                 <ItemCards key={key} products={item}></ItemCards>
               ))}

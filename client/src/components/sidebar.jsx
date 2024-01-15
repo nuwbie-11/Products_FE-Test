@@ -31,11 +31,11 @@ const SideBar = () => {
       ];
   return (
     <header className="z-[999] relative">
-        <div className="h-screen fixed bg-white md:w-[14.5rem] shadow-lg shadow-black/40 top-0 sidebar-container">
-          <nav className="flex flex-col w-full py-12">
-            <ul className="navItems flex flex-col pt-12 gap-y-3 px-3 font-semibold">
+        <div className="w-[100dvw] md:h-[screen] fixed bg-white md:w-[14.5rem] shadow-lg shadow-black/40 md:top-0 bottom-0 sidebar-container">
+          <nav className="flex md:flex-col w-full md:py-12 py-2 justify-center md:justify-start">
+            <ul className="navItems flex  md:flex-col md:pt-12 gap-x-3 md:gap-y-3 px-1 md:px-3 font-semibold">
               {userMenus.map((items, key) => (
-                <div key={key} className="flex items-center gap-x-3">
+                <div key={key} className="flex flex-col md:flex-row items-center gap-x-3">
                     {navIcons[key]}
                     <button
                     onClick={items["func"]}
