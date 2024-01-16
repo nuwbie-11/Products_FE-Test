@@ -50,12 +50,15 @@ def getProducts():
 
 @app.route('/products/<id>',methods=['GET'])
 def getProductsById(id):
-    detail = Product.query.filter_by(id=id).first()
-    if detail is not None:
-        return jsonify(response=detail.toJson()),200
+    if 'uname' in session:
+        detail = Product.query.filter_by(id=id).first()
+        if detail is not None:
+            return jsonify(response=detail.toJson()),200
+        else:
+            print("not found")
+            return jsonify(response="Not Found"),400
     else:
-        print("not found")
-        return jsonify(response="Not Found"),400
+        return jsonify(response="Unauthorized"),401
 
 @app.route('/createProductRecord',methods=['POST'])
 def createNewProducts():
@@ -132,14 +135,17 @@ def deleteProduct(id):
 
 @app.route('/getDistinctBrand',methods=['GET'])
 def getDistinctBrand():
-    brands = Product.query.distinct(Product.brand).all()
-    if brands is not None:
-        brands = [x.toJson()["brand"] for x in brands]
-        # print(brands)
-        return jsonify(response=brands),200
+    if 'uname' in session :
+        brands = Product.query.distinct(Product.brand).all()
+        if brands is not None:
+            brands = [x.toJson()["brand"] for x in brands]
+            # print(brands)
+            return jsonify(response=brands),200
+        else:
+            print("not found")
+            return jsonify(response="Not Found"),400
     else:
-        print("not found")
-        return jsonify(response="Not Found"),400
+        return jsonify(response="Unauthorized"),401
 
 # END OF PRODUCT ROUTES ENDPOINT
 
@@ -180,8 +186,7 @@ def logout():
 @app.route('/protected', methods=['GET'])
 def protected():
     token = request.cookies.get('activeUser')
-    print(token)
-    print(session)
+
     if 'uname' in session and token:
         return jsonify(message='Protected data',uid = jwt.decode(token,app.config["SECRET_KEY"],algorithms=['HS256'])["activeUserId"]), 200
     else:

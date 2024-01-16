@@ -10,27 +10,25 @@ const AuthPages = () => {
   const [isLoading, setLoading] = useState(true);
 
   const [loadingButton, setLoadingButton] = React.useState(false);
-  const [message,setMessage] = useState("")
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
   // Listen for the UID Changes
   useEffect(() => {
     if (uid !== undefined) {
-      // UID would never undefined after fetching from useIsLogged In
-      // After done fetching setLoading to false
-      setLoading(false);
+        // check whether uid has property of uid itself
+        // Key 'uid' indicates user is authorized
+      if (uid.hasOwnProperty('uid')) {
+        navigate('/dashboard')
+        
+      }else{
+        // UID would never undefined after fetching from useIsLogged In
+        // After done fetching setLoading to false
+        setLoading(false);
+      }
     }
   }, [uid]);
 
-  // Listen for the isLoading changes
-  // After loading is done, which is fetching is also done
-  useEffect(() => {
-    // check whether uid has property of uid itself
-    // Key 'uid' indicates user is authorized
-    if (!isLoading && uid.hasOwnProperty("uid")) {
-      navigate("/dashboard");
-    }
-  }, [isLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,11 +47,12 @@ const AuthPages = () => {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Credentials": true,
         },
       });
       if (!response.ok) {
         const body = await response.json();
-        setMessage(body["message"])
+        setMessage(body["message"]);
         throw new Error("Failed to Login");
       }
 
@@ -100,9 +99,6 @@ const AuthPages = () => {
               </form>
             </div>
           </div>
-          <p className="text-rose-500 font-semibold" >
-            {message}
-          </p>
         </main>
       )}
     </>

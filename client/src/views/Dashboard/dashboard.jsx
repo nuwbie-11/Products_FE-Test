@@ -17,16 +17,17 @@ function Dashboard() {
 
   useEffect(() => {
     if (uid !== undefined) {
-      setActiveUserId(uid);
-      setLoading(false);
+      if (uid.hasOwnProperty('uid')) {
+        if (activeUserId === undefined) {
+          setActiveUserId(uid);
+        }
+        setLoading(false);
+      
+      }else{
+        navigate('/')
+      }
     }
   }, [uid]);
-
-  useEffect(() => {
-    if (!isLoading && !uid.hasOwnProperty("uid")) {
-      navigate("/");
-    }
-  }, [isLoading]);
 
   return (
     <>

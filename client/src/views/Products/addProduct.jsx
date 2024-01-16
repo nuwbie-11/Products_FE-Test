@@ -22,16 +22,15 @@ function AddProducts() {
   const [brandController, setBrandController] = useState();
 
   useEffect(() => {
-    if (uid !== undefined && brandsOption !== undefined) {
-      setLoading(false);
+    if (uid !== undefined) {
+      if (uid.hasOwnProperty('uid')) {
+        setLoading(false);
+      
+      }else{
+        navigate('/')
+      }
     }
   }, [uid]);
-
-  useEffect(() => {
-    if (!isLoading && !uid.hasOwnProperty("uid")) {
-      navigate("/");
-    }
-  }, [isLoading]);
 
   const handleBrandChanges = (event) => {
     setBrandController(event.target.value);
@@ -56,14 +55,17 @@ function AddProducts() {
       hargaVariasi: formData.get("hargaVariasi"),
     };
 
-    const res = await fetch("/createProductRecord", {
-      method: "POST",
-      body: JSON.stringify(dataStream),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/createProductRecord`,
+      {
+        method: "POST",
+        body: JSON.stringify(dataStream),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
     if (res.ok) {
       navigate("/dashboard");
@@ -75,7 +77,7 @@ function AddProducts() {
       {isLoading ? (
         <LoadingCircular></LoadingCircular>
       ) : (
-        <div className="mb-12 md:mb-1">
+        <>
           <h3 className="font-bold text-[2rem]">Tambah Barang</h3>
           <div className="addProductFormWrapper md:w-full">
             <form
@@ -130,7 +132,7 @@ function AddProducts() {
               />
             </form>
           </div>
-        </div>
+        </>
       )}
     </>
   );
